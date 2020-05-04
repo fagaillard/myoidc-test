@@ -1,0 +1,350 @@
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/image.dockerRepositoryCheck: 2020-05-04T13:36:29Z
+    creationTimestamp: 2020-05-04T12:58:21Z
+    generation: 6
+    labels:
+      app: apache-oidc
+    name: apache-oidc
+    namespace: oidc-sessions
+    resourceVersion: "41818933"
+    selfLink: /apis/image.openshift.io/v1/namespaces/oidc-sessions/imagestreams/apache-oidc
+    uid: eed09922-8e06-11ea-af62-fa163ebcb9a6
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        openshift.io/imported-from: fagaillard/apache2oidc:1.1
+      from:
+        kind: DockerImage
+        name: fagaillard/apache2oidc:1.1
+      generation: 6
+      importPolicy: {}
+      name: "1.1"
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: docker-registry.default.svc:5000/oidc-sessions/apache-oidc
+    tags:
+    - conditions:
+      - generation: 4
+        lastTransitionTime: 2020-05-04T13:34:26Z
+        message: dockerimage.image.openshift.io "fagaillard/apache2oidc:1.1" not found
+        reason: NotFound
+        status: "False"
+        type: ImportSuccess
+      items:
+      - created: 2020-05-04T12:58:23Z
+        dockerImageReference: fagaillard/apache2oidc@sha256:d3e076fc51af653b4b19ceb840029e9b987f4bfb5f563741ce8288950e6be2a7
+        generation: 2
+        image: sha256:d3e076fc51af653b4b19ceb840029e9b987f4bfb5f563741ce8288950e6be2a7
+      tag: "1.0"
+    - items:
+      - created: 2020-05-04T13:36:29Z
+        dockerImageReference: fagaillard/apache2oidc@sha256:0200c4a7f4629cc9b78b9508e0fd0126a37efa8808b5c97e807bba08df0157ab
+        generation: 6
+        image: sha256:0200c4a7f4629cc9b78b9508e0fd0126a37efa8808b5c97e807bba08df0157ab
+      tag: "1.1"
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/image.dockerRepositoryCheck: 2020-05-04T13:01:13Z
+    creationTimestamp: 2020-05-04T13:01:11Z
+    generation: 2
+    labels:
+      app: tornado
+    name: tornado
+    namespace: oidc-sessions
+    resourceVersion: "41810597"
+    selfLink: /apis/image.openshift.io/v1/namespaces/oidc-sessions/imagestreams/tornado
+    uid: 5462dc17-8e07-11ea-af62-fa163ebcb9a6
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        openshift.io/imported-from: fagaillard/mytornado:1.1
+      from:
+        kind: DockerImage
+        name: fagaillard/mytornado:1.1
+      generation: 2
+      importPolicy: {}
+      name: "1.1"
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: docker-registry.default.svc:5000/oidc-sessions/tornado
+    tags:
+    - items:
+      - created: 2020-05-04T13:01:13Z
+        dockerImageReference: fagaillard/mytornado@sha256:72ed5b477e83435f63b105387d9523e85e7fb5a81ffe8e99332708dc486be601
+        generation: 2
+        image: sha256:72ed5b477e83435f63b105387d9523e85e7fb5a81ffe8e99332708dc486be601
+      tag: "1.1"
+- apiVersion: v1
+  data:
+    OIDC_CLIENT_ID: okd-oidc-test
+    OIDC_CLIENT_SECRET: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    OIDC_CRYPTO_PASSPHRASE: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    OIDC_REDIRECT_URI: http://myoidc-test.apps-dev.hbp.eu/redirect_uri
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: 2020-05-04T12:47:02Z
+    name: apacheoidc-config-map
+    namespace: oidc-sessions
+    resourceVersion: "41817647"
+    selfLink: /api/v1/namespaces/oidc-sessions/configmaps/apacheoidc-config-map
+    uid: 5a381e60-8e05-11ea-af62-fa163ebcb9a6
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2020-05-04T12:58:21Z
+    generation: 5
+    labels:
+      app: apache-oidc
+    name: apache-oidc
+    namespace: oidc-sessions
+    resourceVersion: "41827011"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/oidc-sessions/deploymentconfigs/apache-oidc
+    uid: eed0cc6b-8e06-11ea-af62-fa163ebcb9a6
+  spec:
+    replicas: 3
+    selector:
+      app: apache-oidc
+      deploymentconfig: apache-oidc
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftWebConsole
+        creationTimestamp: null
+        labels:
+          app: apache-oidc
+          deploymentconfig: apache-oidc
+      spec:
+        containers:
+        - env:
+          - name: OIDC_CLIENT_ID
+            value: okd-oidc-test
+          - name: OIDC_CLIENT_SECRET
+            value: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          - name: OIDC_REDIRECT_URI
+            value: http://myoidc-test.apps-dev.hbp.eu/redirect_uri
+          - name: OIDC_CRYPTO_PASSPHRASE
+            value: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          image: fagaillard/apache2oidc@sha256:d3e076fc51af653b4b19ceb840029e9b987f4bfb5f563741ce8288950e6be2a7
+          imagePullPolicy: IfNotPresent
+          name: apache-oidc
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - image: fagaillard/mytornado@sha256:72ed5b477e83435f63b105387d9523e85e7fb5a81ffe8e99332708dc486be601
+          imagePullPolicy: IfNotPresent
+          name: tornado
+          ports:
+          - containerPort: 8888
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - apache-oidc
+        from:
+          kind: ImageStreamTag
+          name: apache-oidc:1.0
+          namespace: oidc-sessions
+        lastTriggeredImage: fagaillard/apache2oidc@sha256:d3e076fc51af653b4b19ceb840029e9b987f4bfb5f563741ce8288950e6be2a7
+      type: ImageChange
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: 2020-05-04T13:11:48Z
+      lastUpdateTime: 2020-05-04T13:11:48Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2020-05-04T14:11:23Z
+      lastUpdateTime: 2020-05-04T14:11:26Z
+      message: replication controller "apache-oidc-3" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 3
+    observedGeneration: 5
+    readyReplicas: 3
+    replicas: 3
+    unavailableReplicas: 0
+    updatedReplicas: 3
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2020-05-04T12:58:21Z
+    labels:
+      app: apache-oidc
+    name: apache-oidc
+    namespace: oidc-sessions
+    resourceVersion: "41809918"
+    selfLink: /api/v1/namespaces/oidc-sessions/services/apache-oidc
+    uid: eed2ad50-8e06-11ea-af62-fa163ebcb9a6
+  spec:
+    clusterIP: 172.30.80.41
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: apache-oidc
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2020-05-04T12:30:17Z
+    labels:
+      app: apache2oidc
+    name: apache2oidc
+    namespace: oidc-sessions
+    resourceVersion: "41803130"
+    selfLink: /api/v1/namespaces/oidc-sessions/services/apache2oidc
+    uid: 02dbf8a8-8e03-11ea-af62-fa163ebcb9a6
+  spec:
+    clusterIP: 172.30.89.79
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: apache2oidc
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2020-05-04T12:05:18Z
+    labels:
+      app: mytornado
+    name: mytornado
+    namespace: oidc-sessions
+    resourceVersion: "41797319"
+    selfLink: /api/v1/namespaces/oidc-sessions/services/mytornado
+    uid: 85ae161c-8dff-11ea-af62-fa163ebcb9a6
+  spec:
+    clusterIP: 172.30.105.190
+    ports:
+    - name: 8888-tcp
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+    selector:
+      deploymentconfig: mytornado
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2020-05-04T13:01:12Z
+    labels:
+      app: tornado
+    name: tornado
+    namespace: oidc-sessions
+    resourceVersion: "41810588"
+    selfLink: /api/v1/namespaces/oidc-sessions/services/tornado
+    uid: 546584b6-8e07-11ea-af62-fa163ebcb9a6
+  spec:
+    clusterIP: 172.30.44.113
+    ports:
+    - name: 8888-tcp
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+    selector:
+      deploymentconfig: tornado
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    creationTimestamp: 2020-05-04T13:10:06Z
+    labels:
+      app: apache-oidc
+    name: myoidc-test
+    namespace: oidc-sessions
+    resourceVersion: "41812706"
+    selfLink: /apis/route.openshift.io/v1/namespaces/oidc-sessions/routes/myoidc-test
+    uid: 92ef5704-8e08-11ea-af62-fa163ebcb9a6
+  spec:
+    host: myoidc-test.apps-dev.hbp.eu
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: apache-oidc
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2020-05-04T13:10:06Z
+        status: "True"
+        type: Admitted
+      host: myoidc-test.apps-dev.hbp.eu
+      routerName: router
+      wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
